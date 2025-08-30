@@ -1,16 +1,8 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import Image from "next/image";
+import logo from "../../public/flo_logo.png";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,9 +16,27 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`antialiased`}>
+        {" "}
+        <header className="sticky top-0 z-50 bg-brand-green text-white flex items-center justify-between px-10 py-4">
+          <div className="flex items-center">
+            <Image
+              src={logo}
+              alt="Flo Energy Company Logo"
+              width={60}
+              height={60}
+            />
+          </div>
+
+          <nav className="flex space-x-4">
+            <Link href="/generate-sql" className="hover:underline font-medium">
+              Generate SQL
+            </Link>
+            <Link href="/history" className="hover:underline font-medium">
+              History
+            </Link>
+          </nav>
+        </header>
         {children}
       </body>
     </html>

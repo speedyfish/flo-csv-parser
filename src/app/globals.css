@@ -3,13 +3,18 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --brand-green: #009877;
+  --brand-yellow: #f7be00;
+  --brand-grey: #d8d8d8;
+  --brand-black: #3d3935;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-brand-green: var(--brand-green);
+  --color-brand-yellow: var(--brand-yellow);
+  --color-brand-black: var(--brand-black);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,5 +27,6 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: system-ui, sans-serif;
+  font-weight: 500;
 }
