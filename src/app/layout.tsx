@@ -27,15 +27,6 @@ export default function RootLayout({
               height={60}
             />
           </div>
-
-          <nav className="flex space-x-4">
-            <Link href="/generate-sql" className="hover:underline font-medium">
-              Generate SQL
-            </Link>
-            <Link href="/history" className="hover:underline font-medium">
-              History
-            </Link>
-          </nav>
         </header>
         {children}
       </body>

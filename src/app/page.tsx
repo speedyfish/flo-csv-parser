@@ -6,14 +6,13 @@ import CSVInput from "./components/CSVInput";
 import CSVInputReupload from "./components/CSVInputReupload";
 import CSVPreview from "./components/CSVPreview";
 import CSVFullscreen from "./components/CSVFullscreen";
-import SQLWindow from "./components/SQLWindow";
+import SQLPanel from "./components/SQLPanel";
 
 export default function CsvUploader() {
   const [data, setData] = useState<string[][]>([]);
   const [error, setError] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [expanded, setExpanded] = useState(false);
-  const [showSQL, setShowSQL] = useState(false);
 
   const parseCSV = (file: File): void => {
     if (file.type !== "text/csv") {
@@ -55,66 +54,63 @@ export default function CsvUploader() {
       let timestamp = new Date(year, month, day, 0, 0, 0);
 
       for (let a = 2; a < 2 + noOfConsumptions && a < data[i].length; a++) {
-        timestamp = new Date(timestamp.getTime() + intervalLength * 60 * 1000);
         const timestampStr = timestamp
-          .toISOString()
-          .replace("T", " ")
-          .substring(0, 19);
+          .toLocaleString("sv-SE")
+          .replace("T", " ");
         const consumption = data[i][a];
         sqlStatementsByNmi[nmi].push(
           `INSERT INTO meter_readings ("nmi", "timestamp", "consumption") VALUES ('${nmi}', '${timestampStr}', '${consumption}');`
         );
+
+        timestamp = new Date(timestamp.getTime() + intervalLength * 60 * 1000);
       }
     }
   }
 
   return (
-    <div className="min-h-screen bg-background p-6 max-w-lg mx-auto">
-      <h1>Upload CSV to generate INSERT SQL statements</h1>
+    <div className="bg-background p-6">
+      <div className="flex flex-col md:flex-row gap-6">
+        {/* Left column: Upload + Preview */}
+        <div className="md:w-1/3 w-full">
+          <h1>Upload CSV to generate INSERT SQL statements</h1>
 
-      {data.length === 0 ? (
-        <CSVInput onFileSelect={setFile} onParseCSV={parseCSV} />
-      ) : (
-        <CSVInputReupload
-          file={file}
-          onFileSelect={setFile}
-          setData={setData}
-        />
-      )}
+          {data.length === 0 ? (
+            <CSVInput onFileSelect={setFile} onParseCSV={parseCSV} />
+          ) : (
+            <CSVInputReupload
+              file={file}
+              onFileSelect={setFile}
+              setData={setData}
+            />
+          )}
 
-      {file && (
-        <p className="mt-3 text-sm text-gray-700">
-          Selected file: <span className="font-medium">{file.name}</span>
-        </p>
-      )}
+          {file && (
+            <p className="mt-3 text-sm text-gray-700">
+              Selected file: <span className="font-medium">{file.name}</span>
+            </p>
+          )}
 
-      {error && <p className="text-red-500 mt-2">{error}</p>}
+          {error && <p className="text-red-500 mt-2">{error}</p>}
 
-      {data.length > 0 && <h1 className="my-3">CSV Preview</h1>}
+          {data.length > 0 && <h1 className="my-3">CSV Preview</h1>}
 
-      {data.length > 0 && (
-        <div className="relative">
-          {/* Small Table Preview */}
-          <CSVPreview data={data} onExpand={() => setExpanded(true)} />
-
-          {/* Full-Screen Modal */}
-          {expanded && (
-            <CSVFullscreen data={data} onClose={() => setExpanded(false)} />
+          {data.length > 0 && (
+            <div className="relative">
+              <CSVPreview data={data} onExpand={() => setExpanded(true)} />
+              {expanded && (
+                <CSVFullscreen data={data} onClose={() => setExpanded(false)} />
+              )}
+            </div>
           )}
         </div>
-      )}
-      {/* <button
-        onClick={() => setShowSQL(true)}
-        className="px-4 py-2 bg-brand-yellow text-white rounded shadow hover:shadow-[4px_4px_0_0_var(--brand-black)] transition-shadow"
-      >
-        Show SQL
-      </button>
-      {showSQL && (
-        <SQLWindow
-          sqlStatements={sqlStatementsByNmi}
-          onClose={() => setShowSQL(false)}
-        />
-      )} */}
+
+        {/* Right column: Third component */}
+        {Object.keys(sqlStatementsByNmi).length > 0 && (
+          <div className="md:w-2/3 w-full bg-gray-100 p-4 rounded-lg shadow-lg">
+            <SQLPanel sqlStatements={sqlStatementsByNmi} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

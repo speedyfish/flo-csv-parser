@@ -22,11 +22,12 @@ const CSVInputReupload = ({
       </div>
 
       {/* Right: button */}
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center">
         <button
           className="
                 px-3 py-1 
                 text-md
+                whitespace-nowrap
             "
           onClick={() => {
             onFileSelect(null);
