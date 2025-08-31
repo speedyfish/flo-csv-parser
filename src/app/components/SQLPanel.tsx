@@ -52,7 +52,7 @@ export default function SQLPanel({ sqlStatements }: SQLPanelProps) {
     : sqlStatements;
 
   return (
-    <div className="bg-gray-50 p-4 rounded-lg shadow-lg overflow-auto h-full font-mono text-sm">
+    <div className="bg-gray-50 p-4 rounded-lg shadow-lg overflow-auto h-full font-mono text-sm dark:bg-gray-600">
       {/* Copy button */}
       <div className="flex items-center justify-between mb-4">
         {/* Santized statements toggle button */}
@@ -88,7 +88,7 @@ export default function SQLPanel({ sqlStatements }: SQLPanelProps) {
         </button>
       </div>
 
-      <h2 className="text-lg font-semibold mb-2">
+      <h2 className="text-lg font-semibold mb-2 dark:text-blue-300">
         SQL Insert Statements{" ("}
         {Object.values(sqlStatementsRefined).reduce(
           (acc, statements) => acc + statements.length,
@@ -97,7 +97,7 @@ export default function SQLPanel({ sqlStatements }: SQLPanelProps) {
         statements)
       </h2>
 
-      <div className="bg-gray-100 p-4 rounded-lg overflow-auto">
+      <div className="bg-gray-100 p-4 rounded-lg overflow-auto dark:bg-gray-300">
         {Object.entries(sqlStatementsRefined).map(([nmi, statements]) => (
           <div key={nmi} className="mb-4">
             {/* NMI comment */}
@@ -121,7 +121,7 @@ export default function SQLPanel({ sqlStatements }: SQLPanelProps) {
                 return (
                   <pre
                     key={idx}
-                    className="whitespace-pre-wrap"
+                    className="whitespace-pre-wrap dark:text-black"
                     dangerouslySetInnerHTML={{ __html: highlighted }}
                   />
                 );

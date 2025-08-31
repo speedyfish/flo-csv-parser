@@ -85,7 +85,7 @@ export default function CsvUploader() {
           )}
 
           {file && (
-            <p className="mt-3 text-sm text-gray-700">
+            <p className="mt-3 text-sm text-gray-700 dark:text-white">
               Selected file: <span className="font-medium">{file.name}</span>
             </p>
           )}
@@ -106,7 +106,7 @@ export default function CsvUploader() {
 
         {/* Right column: Third component */}
         {Object.keys(sqlStatementsByNmi).length > 0 && (
-          <div className="md:w-2/3 w-full bg-gray-100 p-4 rounded-lg shadow-lg">
+          <div className="md:w-2/3 w-full bg-gray-100 p-4 rounded-lg shadow-lg dark:bg-black">
             <SQLPanel sqlStatements={sqlStatementsByNmi} />
           </div>
         )}

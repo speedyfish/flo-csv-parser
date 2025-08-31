@@ -16,7 +16,10 @@ const CSVInputReupload = ({
       {/* Left: icon + filename */}
       <div className="flex items-center space-x-2 min-w-0">
         <Upload className="w-5 h-5 text-gray-700 flex-shrink-0" />
-        <span className="text-sm font-medium truncate" title={file?.name}>
+        <span
+          className="text-sm font-medium truncate dark:text-black"
+          title={file?.name}
+        >
           {file?.name}
         </span>
       </div>
