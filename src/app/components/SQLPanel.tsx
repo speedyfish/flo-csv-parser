@@ -3,7 +3,31 @@
 import React, { useState } from "react";
 import { Copy } from "lucide-react";
 
-type SQLStatements = Record<string, string[]>;
+export type SQLStatements = Record<string, string[]>;
+
+export function sanitizeSQL(sqlStatements: SQLStatements): SQLStatements {
+  console.log("sqlStatements", sqlStatements);
+  const sanitized: SQLStatements = {};
+
+  Object.entries(sqlStatements).forEach(([nmi, statements]) => {
+    const seenTimestamps = new Map<string, string>();
+
+    statements.forEach((stmt) => {
+      // Extract the timestamp from the statement using regex
+      const match = stmt.match(/VALUES \('.*?', '(.*?)',/);
+      if (match) {
+        const timestamp = match[1];
+        // Always overwrite: this ensures older duplicates are replaced
+        seenTimestamps.set(timestamp, stmt);
+      }
+    });
+
+    // Save deduplicated statements for this NMI
+    sanitized[nmi] = Array.from(seenTimestamps.values());
+  });
+
+  return sanitized;
+}
 
 type SQLPanelProps = {
   sqlStatements: SQLStatements;
@@ -23,36 +47,9 @@ export default function SQLPanel({ sqlStatements }: SQLPanelProps) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  function sanitizeSQL(sqlStatements: SQLStatements): SQLStatements {
-    const sanitized: SQLStatements = {};
-
-    Object.entries(sqlStatements).forEach(([nmi, statements]) => {
-      const seenTimestamps = new Map<string, string>();
-
-      statements.forEach((stmt) => {
-        // Extract the timestamp from the statement using regex
-        const match = stmt.match(/VALUES \('.*?', '(.*?)',/);
-        if (match) {
-          const timestamp = match[1];
-          // Always overwrite: this ensures older duplicates are replaced
-          seenTimestamps.set(timestamp, stmt);
-        }
-      });
-
-      // Save deduplicated statements for this NMI
-      sanitized[nmi] = Array.from(seenTimestamps.values());
-    });
-
-    return sanitized;
-  }
-
   const sqlStatementsRefined = sanitized
     ? sanitizeSQL(sqlStatements)
     : sqlStatements;
-
-  const toggleSanitized = () => {
-    setSanitized(!sanitized);
-  };
 
   return (
     <div className="bg-gray-50 p-4 rounded-lg shadow-lg overflow-auto h-full font-mono text-sm">
@@ -67,6 +64,7 @@ export default function SQLPanel({ sqlStatements }: SQLPanelProps) {
             className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors ${
               sanitized ? "bg-green-500" : "bg-gray-400"
             }`}
+            data-testid="sanitize-toggle"
           >
             <div
               className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${
