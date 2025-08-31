@@ -1,6 +1,11 @@
 Website is hosted on Vercel
 https://flo-csv-parser.vercel.app
 
+You may download sample-nem12.csv to test
+
+Unit testing file: snaitizeSQL.test.ts
+Component testing file: SQLPanel.test.tsx
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
