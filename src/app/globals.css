@@ -14,6 +14,7 @@
   --color-foreground: var(--foreground);
   --color-brand-green: var(--brand-green);
   --color-brand-yellow: var(--brand-yellow);
+  --color-brand-grey: var(--brand-grey);
   --color-brand-black: var(--brand-black);
 }
 
@@ -21,6 +22,23 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+  }
+}
+
+@layer utilities {
+  /* .hover-shadow-brand {
+    @apply transition-shadow duration-150 shadow-none hover:shadow-[4px_4px_0_0_var(--brand-black)] bg-brand-yellow 
+    text-white;
+  } */
+}
+
+@layer base {
+  h1 {
+    @apply text-xl font-bold;
+  }
+  button {
+    @apply transition-shadow duration-150 shadow-none hover:shadow-[4px_4px_0_0_var(--brand-black)] bg-brand-yellow 
+      text-white rounded;
   }
 }
 
